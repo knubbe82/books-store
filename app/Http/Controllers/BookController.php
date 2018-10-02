@@ -2,13 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Book;
 
 class BookController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth', ['except' => ['index']]);
+    }
+
+    public function index()
+    {
+        $books = Book::all();
+
+        return view('welcome', [
+            'books' => $books
+        ]);
     }
 
     public function userBooks()
