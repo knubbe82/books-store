@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 offset-4">
-                <form class="form-horizontal" method="POST" id="payment-form" role="form">
+                <form class="form-horizontal" method="POST" id="payment-form" role="form" action="{{ route('pay') }}">
                     {{ csrf_field() }}
 
                     <div class="form-row">
@@ -24,11 +24,11 @@
                         <div class="col-xs-4 form-group expiration required text-center">
                             <label class="control-label"> Year</label>
                             <input class="form-control card-expiry-year" placeholder="YYYY" size="4" type="text" name="ccExpiryYear">
-                            <input class="form-control card-expiry-year" placeholder="YYYY" size="4" type="hidden" name="amount" value="300">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col-md-12">
+                            <input class="form-control card-expiry-year" placeholder="YYYY" size="4" type="hidden" name="amount" value="{{ $book->price }}">
                             <div class="form-control total btn btn-info">
                                 Total:
                                 <span class="amount">{{ $book->price }}</span>
@@ -41,6 +41,15 @@
                         </div>
                     </div>
                 </form>
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

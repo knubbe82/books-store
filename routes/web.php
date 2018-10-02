@@ -15,9 +15,10 @@ Route::get('/', function () {
     return view('welcome', [
         'books' => \App\Book::all()
     ]);
-});
+})->name('welcome');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/payment/{id}', 'PaymentController@paymentForm')->name('payment.form');
+Route::post('/payment', 'PaymentController@pay')->name('pay');
