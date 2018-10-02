@@ -6,7 +6,6 @@ use App\Book;
 
 use Cartalyst\Stripe\Stripe;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
@@ -90,5 +89,18 @@ class PaymentController extends Controller
     {
         $book = Book::findOrFail($data['book_id']);
         $book->users()->attach(\auth()->user()->id, ['charge' => $charge['id']]);
+    }
+
+    public function refund(Request $request)
+    {
+        $stripe = Stripe::make(env('STRIPE_SECRET'));
+        $stripe->refunds()->create($request->charge, $request->price, [
+            'reason' => 'requested_by_customer',
+        ]);
+
+        $book = Book::findOrFail($request->book);
+        $book->users()->detach(\auth()->user()->id, ['charge' => $request->charge]);
+
+        return redirect()->back()->with(['message' => 'Refunded successfully', 'alert' => 'info']);
     }
 }
