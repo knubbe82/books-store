@@ -33,27 +33,14 @@ class PaymentController extends Controller
         ]);
 
         $data = $request->except('_token');
-        $stripe = Stripe::make(env('STRIPE_KEY'));
         try {
-            $token = $stripe->tokens()->create([
-                'card' => [
-                    'number' => $data['card_no'],
-                    'exp_month' => $data['ccExpiryMonth'],
-                    'exp_year' => $data['ccExpiryYear'],
-                    'cvc' => $data['cvvNumber'],
-                ],
-            ]);
+            $token = $this->token($data);
 
             if (!isset($token['id'])) {
                 return redirect()->back();
             }
-            $stripeCharge = Stripe::make(env('STRIPE_SECRET'));
-            $charge = $stripeCharge->charges()->create([
-                'card' => $token['id'],
-                'currency' => 'USD',
-                'amount' => $data['amount'],
-                'description' => 'Book paid',
-            ]);
+            
+            $charge = $this->charge($token, $data);
 
             if ($charge['status'] == 'succeeded') {
                 return redirect()->route('welcome')->with('message', 'Book paid successfully');
@@ -64,5 +51,35 @@ class PaymentController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('welcome')->with('message', $e->getMessage());
         }
+    }
+
+    private function token($data)
+    {
+        $stripe = Stripe::make(env('STRIPE_KEY'));
+
+        $token = $stripe->tokens()->create([
+            'card' => [
+                'number' => $data['card_no'],
+                'exp_month' => $data['ccExpiryMonth'],
+                'exp_year' => $data['ccExpiryYear'],
+                'cvc' => $data['cvvNumber'],
+            ],
+        ]);
+
+        return $token;
+    }
+
+    private function charge($token, $data)
+    {
+        $stripe = Stripe::make(env('STRIPE_SECRET'));
+
+        $charge = $stripe->charges()->create([
+            'card' => $token['id'],
+            'currency' => 'USD',
+            'amount' => $data['amount'],
+            'description' => 'Book paid',
+        ]);
+
+        return $charge;
     }
 }
