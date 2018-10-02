@@ -29,6 +29,7 @@
                     <div class="form-row">
                         <div class="col-md-12">
                             <input class="form-control card-expiry-year" placeholder="YYYY" size="4" type="hidden" name="amount" value="{{ $book->price }}">
+                            <input type="hidden" name="book_id" value="{{ $book->id }}">
                             <div class="form-control total btn btn-info">
                                 Total:
                                 <span class="amount">{{ $book->price }}</span>

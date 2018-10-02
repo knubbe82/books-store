@@ -6,6 +6,7 @@ use App\Book;
 
 use Cartalyst\Stripe\Stripe;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
@@ -39,10 +40,12 @@ class PaymentController extends Controller
             if (!isset($token['id'])) {
                 return redirect()->back();
             }
-            
+
             $charge = $this->charge($token, $data);
 
             if ($charge['status'] == 'succeeded') {
+                $this->successPayment($data, $charge);
+
                 return redirect()->route('welcome')->with('message', 'Book paid successfully');
             } else {
                 return redirect()->route('welcome')->with('message', 'Payment error');
@@ -81,5 +84,11 @@ class PaymentController extends Controller
         ]);
 
         return $charge;
+    }
+
+    private function successPayment($data, $charge)
+    {
+        $book = Book::findOrFail($data['book_id']);
+        $book->users()->attach(\auth()->user()->id, ['charge' => $charge['id']]);
     }
 }
