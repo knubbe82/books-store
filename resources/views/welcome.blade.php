@@ -73,6 +73,14 @@
                 bottom: 0;
                 width: 100%;
             }
+            .card-footer a {
+                display: inline-block;
+                border-radius: 5px;
+                width: 50px;
+                background: #1d68a7;
+                color: #fff;
+                text-decoration: none;
+            }
         </style>
     </head>
     <body>
@@ -111,7 +119,7 @@
                         <div class="card-footer">
                             {{ $book->price }} $
                             @auth
-                                <button>Buy</button>
+                                <a href="{{ route('payment.form', ['id' => $book->id]) }}">Buy</a>
                             @endauth
                         </div>
                     </div>
