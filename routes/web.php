@@ -11,11 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome', [
-        'books' => \App\Book::all()
-    ]);
-})->name('welcome');
+
+Route::get('/', 'BookController@index')->name('welcome');
 
 Auth::routes();
 
