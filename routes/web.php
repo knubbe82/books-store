@@ -12,7 +12,9 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome', [
+        'books' => \App\Book::all()
+    ]);
 });
 
 Auth::routes();

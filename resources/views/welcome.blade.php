@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>Books Store</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
@@ -23,16 +23,6 @@
 
             .full-height {
                 height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
             }
 
             .top-right {
@@ -60,7 +50,28 @@
             }
 
             .m-b-md {
+                margin-top: 50px;
                 margin-bottom: 30px;
+            }
+            .card {
+                display: inline-block;
+                border: 1px solid #f4f4f4;
+                padding: 10px;
+                margin: 10px;
+                width: 20%;
+                height: 100px;
+                position: relative;
+                vertical-align: bottom;
+            }
+            .card-header {
+                background-color: #e4e4e4;
+                color: #000;
+                padding: 0;
+            }
+            .card-footer {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
             }
         </style>
     </head>
@@ -70,6 +81,15 @@
                 <div class="top-right links">
                     @auth
                         <a href="{{ url('/home') }}">Home</a>
+                        <a class="dropdown-item" href="{{ route('logout') }}"
+                           onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                            {{ __('Logout') }}
+                        </a>
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
                     @else
                         <a href="{{ route('login') }}">Login</a>
                         <a href="{{ route('register') }}">Register</a>
@@ -79,17 +99,23 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                    Books Store
                 </div>
 
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
+                @foreach ($books as $book)
+                    <div class="card">
+                        <div class="card-header">
+                            {{ $book->title }}
+                        </div>
+                        <div class="card-body">{{ $book->description }}</div>
+                        <div class="card-footer">
+                            {{ $book->price }} $
+                            @auth
+                                <button>Buy</button>
+                            @endauth
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </body>
