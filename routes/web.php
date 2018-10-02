@@ -22,3 +22,5 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/payment/{id}', 'PaymentController@paymentForm')->name('payment.form');
 Route::post('/payment', 'PaymentController@pay')->name('pay');
+
+Route::get('/user/books', 'BookController@userBooks')->name('user.books');
