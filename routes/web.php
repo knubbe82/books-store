@@ -11,6 +11,15 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::get('/', 'BookController@index')->name('welcome');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/payment/{id}', 'PaymentController@paymentForm')->name('payment.form');
+Route::post('/payment', 'PaymentController@pay')->name('pay');
+
+Route::get('/user/books', 'BookController@userBooks')->name('user.books');
+
+Route::post('/refund', 'PaymentController@refund')->name('payment.refund');
