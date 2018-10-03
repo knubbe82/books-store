@@ -19,7 +19,6 @@
     @if (Route::has('login'))
         <div class="top-right links">
             @auth
-                {{--<a href="{{ url('/home') }}">Home</a>--}}
                 <a href="{{ route('user.books') }}">My books</a>
                 <a class="dropdown-item" href="{{ route('logout') }}"
                    onclick="event.preventDefault();
@@ -56,7 +55,7 @@
                 <div class="card-footer">
                     {{ $book->price }} $
                     @auth
-                        <a href="{{ route('payment.form', ['id' => $book->id]) }}">Buy</a>
+                        <a href="{{ route('payment.form', ['id' => $book->id]) }}" class="buyButton">Buy</a>
                     @endauth
                 </div>
             </div>
